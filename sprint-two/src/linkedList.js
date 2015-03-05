@@ -37,6 +37,34 @@ var LinkedList = function(){
   return list;
 };
 
+var DoubleLinkedList = function(){
+  var list = LinkedList();
+
+  list.addToTail = function(value){
+    var newNode = DoubleNode(value);
+
+    // set previous value to new node
+    if (list.tail){
+      list.tail.next = newNode;
+      newNode.previous = list.tail;
+    }
+    list.head || (list.head = newNode);
+    list.tail = newNode;
+  };
+
+  list.addToHead = function(value){
+    var newNode = DoubleNode(value);
+
+    if (list.head){
+      list.head.previous = newNode;
+      newNode.next = list.head;
+    }
+    list.tail || (list.tail = newNode);
+    list.head = newNode;
+  };
+  return list;
+}
+
 var Node = function(value){
   // create node object
   var node = {};
@@ -46,6 +74,14 @@ var Node = function(value){
 
   return node;
 };
+
+var DoubleNode = function(value){
+  var node = Node(value);
+
+  node.previous = null;
+
+  return node;
+}
 
 /*
  * Complexity: What is the time complexity of the above functions?
