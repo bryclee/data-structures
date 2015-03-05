@@ -11,7 +11,7 @@ HashTable.prototype._checkIndex = function(i, k){
   for (var j = 0; j < this._limit; j++){
   	// if searching for a value
   	var checkAtI = this._storage.get(i)
-  	if (k && checkAtI[0] === k){
+  	if (k && checkAtI && checkAtI[0] === k){
   		return i;
     // if searching for a blank spot
   	} else if (k === undefined && checkAtI === undefined){
@@ -51,7 +51,7 @@ HashTable.prototype.retrieve = function(k){
 
 HashTable.prototype.remove = function(k){
   var i = getIndexBelowMaxForKey(k, this._limit);
-  var newI = this.checkIndex(i, k);
+  var newI = this._checkIndex(i, k);
 
   if (newI !== false){
   	this._storage.set(newI, undefined);
