@@ -5,7 +5,7 @@ var LinkedList = function(){
   list.tail = null;
 
   list.addToTail = function(value){
-    // create a new Node
+    // create a new Node, set tail ref, set list head and tail refs
     var newNode = Node(value);
 
     list.tail && (list.tail.next = newNode);
@@ -16,6 +16,7 @@ var LinkedList = function(){
   list.removeHead = function(){
     // set the head.next node to list.head
     // delete the head.next node
+    // return the old head value
     var result = list.head.value;
     list.head = list.head.next;
 
@@ -23,6 +24,7 @@ var LinkedList = function(){
   };
 
   list.contains = function(target){
+    // starting from head, look through all nodes for target value
     var idx = list.head;
     while (idx) {
       if (idx.value === target)
@@ -36,6 +38,7 @@ var LinkedList = function(){
 };
 
 var Node = function(value){
+  // create node object
   var node = {};
 
   node.value = value;
