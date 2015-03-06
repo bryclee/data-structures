@@ -1,18 +1,20 @@
-var BinarySearchTree = function(value){
-	var tree = Object.create(BinarySearchTree.prototype);
+var BinarySearchTree = function(value, autobal){
+  var tree = Object.create(BinarySearchTree.prototype);
 
-	tree.value = value;
-	tree.left = null;
-	tree.right = null;
+  tree.value = value;
+  tree.left = null;
+  tree.right = null;
   tree.parent = null;
   tree.leftWeight = 0;
   tree.rightWeight = 0;
+  tree.autobal = autobal;
 
-	return tree;
+  return tree;
 };
 
 BinarySearchTree.prototype.insert = function(val){
 	// check lower or greater than value
+  var res;
 
   if (val < this.value){
   	// check if branch does not exist and add or
@@ -22,24 +24,28 @@ BinarySearchTree.prototype.insert = function(val){
     // increase width of this by 1
     // start depth counter at 1
     if (this.left === null){
-      this.left = new BinarySearchTree(val);
+      res = new BinarySearchTree(val, this.autobal);
+      this.left = res;
       this.left.parent = this;
     } else {
-    	this.left.insert(val);
+    	res = this.left.insert(val);
     }
   } else if (val > this.value){
     this.rightWeight++;
     if (this.right === null){
-      this.right = new BinarySearchTree(val);
+      res = new BinarySearchTree(val, this.autobal);
+      this.right = res; 
       this.right.parent = this;
   	} else {
-  		this.right.insert(val);
-  	}
+      res = this.right.insert(val);
+    }
   }
   // check if node is unbalanced goes here
-  if (Math.abs(this.leftWeight - this.rightWeight) >= 2){
-    this.rebalance();
+  if (this.autobal !== undefined){
+    if (Math.abs(this.rightWeight - this.leftWeight) > 1)
+      this.rebalance(this.rightWeight - this.leftWeight);
   }
+  return res;
 };
 
 
@@ -66,6 +72,12 @@ BinarySearchTree.prototype.getBranch = function(val){
       return this.right.getBranch(val);
     }
   }
+}
+
+BinarySearchTree.prototype.getTopParent = function(){
+  if (this.parent === null)
+    return this;
+  else return this.parent.getTopParent();
 }
 
 BinarySearchTree.prototype.depthFirstLog = function(cb){
@@ -120,12 +132,13 @@ BinarySearchTree.prototype.rebalance = function(dir){
     (childClosest !== null) && (childClosest.parent = this);
     (child !== null) && (child.right = this);
     this.parent = child;
-
+    
+    // reshuffle the weights
     if (childClosest){
       this.leftWeight = childClosest.leftWeight + childClosest.rightWeight + 1;
     } else {
       this.leftWeight = 0;
-    }
+    } 
     child.rightWeight = this.leftWeight + this.rightWeight + 1;
     // this.right branch takes this place
   } else {
@@ -169,13 +182,14 @@ BinarySearchTree.prototype.printTree = function(){
   // process all in queue first (this level) before starting nextQueue
   // logging each node of the tree in levels
   while (totalElements > 0){
+    console.log(totalElements);
     results = [];
     // process level
     while (queue.length > 0){
       testing = queue.shift();
-      totalElements--;
       // set depth if testing is not null
       if (testing){
+        totalElements--;
         results.push(testing.value);
         nextQueue.push(testing.left);
         nextQueue.push(testing.right);
