@@ -103,6 +103,7 @@ BinarySearchTree.prototype.printTree = function(){
   // logging each node of the tree in levels
   while (depth >= 0){
     results = [];
+    // process level
     while (queue.length > 0){
       testing = queue.shift();
       // set depth if testing is not null
@@ -112,9 +113,11 @@ BinarySearchTree.prototype.printTree = function(){
         nextQueue.push(testing.left);
         nextQueue.push(testing.right);
       } else {
+        nextQueue.push(null,null);
         results.push(space,'x',space,' ');
       }
     }
+    // output level
     if (nextQueue.length > 0){
       console.log(results.join(''));
       depth--;
