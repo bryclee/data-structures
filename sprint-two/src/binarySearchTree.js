@@ -36,8 +36,10 @@ BinarySearchTree.prototype.insert = function(val){
   		this.right.insert(val);
   	}
   }
-
   // check if node is unbalanced goes here
+  if (Math.abs(this.leftWeight - this.rightWeight) >= 2){
+    this.rebalance();
+  }
 };
 
 
@@ -100,7 +102,7 @@ BinarySearchTree.prototype.rebalance = function(dir){
   // to rebalance, set parent's child to child, child's child to this,
   // and this child to childClosest
 
-  // rebalance left
+  // rebalance left, this.left branch takes this place
   if (dir < 0){
     parent = this.parent;
     child = this.left;
@@ -108,7 +110,7 @@ BinarySearchTree.prototype.rebalance = function(dir){
       return;
     childClosest = child.right;
     
-
+    // shift partners, reset weights
     if ((parent !== null) && (parent.left === this))
       parent.left = child;
     else if ((parent !== null) && (parent.right === this))
@@ -118,6 +120,14 @@ BinarySearchTree.prototype.rebalance = function(dir){
     (childClosest !== null) && (childClosest.parent = this);
     (child !== null) && (child.right = this);
     this.parent = child;
+
+    if (childClosest){
+      this.leftWeight = childClosest.leftWeight + childClosest.rightWeight + 1;
+    } else {
+      this.leftWeight = 0;
+    }
+    child.rightWeight = this.leftWeight + this.rightWeight + 1;
+    // this.right branch takes this place
   } else {
     parent = this.parent;
     child = this.right;
@@ -135,7 +145,14 @@ BinarySearchTree.prototype.rebalance = function(dir){
     (childClosest !== null) && (childClosest.parent = this);
     (child !== null) && (child.left = this);
     this.parent = child;
+
+    if (childClosest){
+      this.rightWeight = childClosest.leftWeight + childClosest.rightWeight + 1;
+    } else
+      this.rightWeight = 0;
+    child.leftWeight = this.leftWeight + this.rightWeight + 1;
   }
+  this.printTree();
 }
 
 BinarySearchTree.prototype.printTree = function(){
