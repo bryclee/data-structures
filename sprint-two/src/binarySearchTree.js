@@ -136,8 +136,48 @@ BinarySearchTree.prototype.printTree = function(){
 
 BinarySearchTree.prototype.rebalance = function(dir){
   // rebalance in direction, negative is left, pos is right
+  var parent;
+  var child;
+  var childClosest;
+  // to rebalance, set parent's child to child, child's child to this,
+  // and this child to childClosest
+
+  // rebalance left
+  if (dir < 0){
+    parent = this.parent;
+    child = this.left;
+    if (!child)
+      return;
+    childClosest = child.right;
+    
+
+    if ((parent !== null) && (parent.left === this))
+      parent.left = child;
+    else if ((parent !== null) && (parent.right === this))
+      parent.right = this;
+    (child !== null) && (child.parent = parent);
+    this.left = childClosest;
+    (childClosest !== null) && (childClosest.parent = this);
+    (child !== null) && (child.right = this);
+    this.parent = child;
+  } else {
+    parent = this.parent;
+    child = this.right;
+    if (!child)
+      return;
+    childClosest = child.left;
 
 
+    if (parent && parent.left === this)
+      parent.left = child;
+    else if (parent && parent.right === this)
+      parent.right = child;
+    (child !== null) && (child.parent = parent);
+    this.right = childClosest;
+    (childClosest !== null) && (childClosest.parent = this);
+    (child !== null) && (child.left = this);
+    this.parent = child;
+  }
 }
 
 /* examples: == depth: 1, 1 space before
