@@ -47,22 +47,29 @@ BinarySearchTree.prototype.insert = function(val){
 
 
 BinarySearchTree.prototype.contains = function(val){
-  if (this.value == val){
+  if (this.getBranch(val) !== null)
     return true;
+  else
+    return false;
+};
+
+BinarySearchTree.prototype.getBranch = function(val){
+  if (this.value == val){
+    return this;
   } else if (val < this.value){
     if (this.left === null){
-      return false;
+      return null;
     } else {
-      return this.left.contains(val);
+      return this.left.getBranch(val);
     }
   } else if (val > this.value){
     if (this.right === null){
-      return false;
+      return null;
     } else {
-      return this.right.contains(val);
+      return this.right.getBranch(val);
     }
   }
-};
+}
 
 BinarySearchTree.prototype.depthFirstLog = function(cb){
   cb(this.value);
@@ -125,6 +132,12 @@ BinarySearchTree.prototype.printTree = function(){
       nextQueue = [];
     }
   }
+}
+
+BinarySearchTree.prototype.rebalance = function(dir){
+  // rebalance in direction, negative is left, pos is right
+
+
 }
 
 /* examples: == depth: 1, 1 space before
