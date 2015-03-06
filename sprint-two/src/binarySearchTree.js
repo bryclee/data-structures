@@ -5,44 +5,39 @@ var BinarySearchTree = function(value){
 	tree.left = null;
 	tree.right = null;
   tree.parent = null;
-  tree.depth = 0;
-  tree.width = 0;
+  tree.leftWeight = 0;
+  tree.rightWeight = 0;
 
 	return tree;
 };
 
 BinarySearchTree.prototype.insert = function(val){
 	// check lower or greater than value
-  var depth = 0;
 
   if (val < this.value){
   	// check if branch does not exist and add or
-    if (this.left === null){
+    this.leftWeight++;
     // call insert of that branch
     // set parent property of new branch
     // increase width of this by 1
     // start depth counter at 1
+    if (this.left === null){
       this.left = new BinarySearchTree(val);
       this.left.parent = this;
-      this.width++;
     } else {
-    	depth = this.left.insert(val);
+    	this.left.insert(val);
     }
   } else if (val > this.value){
-  	if (this.right === null){
-  		this.right = new BinarySearchTree(val);
+    this.rightWeight++;
+    if (this.right === null){
+      this.right = new BinarySearchTree(val);
       this.right.parent = this;
-      this.width++;
   	} else {
-  		depth = this.right.insert(val);
+  		this.right.insert(val);
   	}
   }
-  depth++;
-  // increase depth property
-  if (depth > this.depth)
-    this.depth = depth;
+
   // check if node is unbalanced goes here
-  return depth;
 };
 
 
@@ -97,43 +92,6 @@ BinarySearchTree.prototype.breadthFirstLog = function(cb){
   }
 }
 
-BinarySearchTree.prototype.printTree = function(){
-  var testing;
-  var results;
-  var depth = this.depth;
-  var spaces;
-  var queue = [];
-  var nextQueue = [];
-  queue.push(this);
-
-  // process all in queue first (this level) before starting nextQueue
-  // logging each node of the tree in levels
-  while (depth >= 0){
-    results = [];
-    // process level
-    while (queue.length > 0){
-      testing = queue.shift();
-      // set depth if testing is not null
-      space = Array(Math.pow(2,depth)).join(' ');
-      if (testing){
-        results.push(space,testing.value,space,' ');
-        nextQueue.push(testing.left);
-        nextQueue.push(testing.right);
-      } else {
-        nextQueue.push(null,null);
-        results.push(space,'x',space,' ');
-      }
-    }
-    // output level
-    if (nextQueue.length > 0){
-      console.log(results.join(''));
-      depth--;
-      queue = nextQueue;
-      nextQueue = [];
-    }
-  }
-}
-
 BinarySearchTree.prototype.rebalance = function(dir){
   // rebalance in direction, negative is left, pos is right
   var parent;
@@ -178,6 +136,54 @@ BinarySearchTree.prototype.rebalance = function(dir){
     (child !== null) && (child.left = this);
     this.parent = child;
   }
+}
+
+BinarySearchTree.prototype.printTree = function(){
+  var testing;
+  var results;
+  var depth = 0;
+  var spaces;
+  var queue = [];
+  var nextQueue = [];
+  var allResults = [];
+  queue.push(this);
+  var totalElements = this.leftWeight + this.rightWeight + 1;
+
+  // process all in queue first (this level) before starting nextQueue
+  // logging each node of the tree in levels
+  while (totalElements > 0){
+    results = [];
+    // process level
+    while (queue.length > 0){
+      testing = queue.shift();
+      totalElements--;
+      // set depth if testing is not null
+      if (testing){
+        results.push(testing.value);
+        nextQueue.push(testing.left);
+        nextQueue.push(testing.right);
+      } else {
+        nextQueue.push(null,null);
+        results.push('x');
+      }
+    }
+    // output level
+    if (nextQueue.length > 0){
+      allResults.push(results);
+      depth++;
+      queue = nextQueue;
+      nextQueue = [];
+    }
+  }
+  // output the elements in the results
+  _.each(allResults, function(line, idx, allResults){
+    results = [];
+    spaces = Array(Math.pow(2,(depth - idx - 1))).join(' ');
+    _.each(line, function(node){
+      results.push(spaces,node,spaces,' ');
+    })
+    console.log(results.join(''));
+  });
 }
 
 /* examples: == depth: 1, 1 space before
