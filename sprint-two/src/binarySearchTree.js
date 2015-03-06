@@ -45,46 +45,21 @@ BinarySearchTree.prototype.insert = function(val){
   return depth;
 };
 
-BinarySearchTree.print = function(){
-  
-}
-/* examples: == depth: 1
-1-
-- -
-=============== depth: 2
-   -
- -   -
-- - - -
-=============== depth: 3
-       -
-   -       -
- -   -   -   -
-- - - - - - - -
-=============== depth: 4
-
-
-
-1-123-123-123-123-1
--1-1-1-1-1-1-1-1-1-1-1-1-1-1-1-
-
-spaces = 2d * 1
-*/
-
 
 BinarySearchTree.prototype.contains = function(val){
   if (this.value == val){
-  	return true;
+    return true;
   } else if (val < this.value){
     if (this.left === null){
-    	return false;
+      return false;
     } else {
-    	return this.left.contains(val);
+      return this.left.contains(val);
     }
   } else if (val > this.value){
     if (this.right === null){
-    	return false;
+      return false;
     } else {
-    	return this.right.contains(val);
+      return this.right.contains(val);
     }
   }
 };
@@ -115,6 +90,55 @@ BinarySearchTree.prototype.breadthFirstLog = function(cb){
   }
 }
 
+BinarySearchTree.prototype.printTree = function(){
+  var testing;
+  var results;
+  var depth = this.depth;
+  var spaces;
+  var queue = [];
+  var nextQueue = [];
+  queue.push(this);
+
+  // process all in queue first (this level) before starting nextQueue
+  // logging each node of the tree in levels
+  while (depth >= 0){
+    results = [];
+    while (queue.length > 0){
+      testing = queue.shift();
+      // set depth if testing is not null
+      space = Array(Math.pow(2,depth)).join(' ');
+      if (testing){
+        results.push(space,testing.value,space,' ');
+        nextQueue.push(testing.left);
+        nextQueue.push(testing.right);
+      } else {
+        results.push(space,'x',space,' ');
+      }
+    }
+    if (nextQueue.length > 0){
+      console.log(results.join(''));
+      depth--;
+      queue = nextQueue;
+      nextQueue = [];
+    }
+  }
+}
+
+/* examples: == depth: 1, 1 space before
+1-
+- -
+=============== depth: 2, 3 spaces before
+   -
+ -   -
+- - - -
+=============== depth: 3, 7 spaces before
+       -
+   -       -
+ -   -   -   -
+- - - - - - - -
+
+spaces = 2d * 1
+*/
 /*
  * Complexity: What is the time complexity of the above functions?
  */
