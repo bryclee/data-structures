@@ -7,9 +7,9 @@ var Trie = function(){
 Trie.prototype.addWord = function(fullWord, wordPosition){
 	// .add() will add word to Trie, creating nodes letter by letter until word
 	// is created.
-
   // initialize if word not input
   if (wordPosition === undefined){
+    fullWord = fullWord.toLowerCase();
     if (this.contents.indexOf(fullWord) !== -1)
       return 0;
     this.contents.push(fullWord);
