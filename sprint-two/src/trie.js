@@ -4,20 +4,23 @@ var Trie = function(){
   this.contents = [];
 }
 
-Trie.prototype.add = function(fullWord, wordPosition){
+Trie.prototype.addWord = function(fullWord, wordPosition){
 	// .add() will add word to Trie, creating nodes letter by letter until word
 	// is created.
 
   // initialize if word not input
   if (wordPosition === undefined){
+    if (this.contents.indexOf(fullWord) !== -1)
+      return 0;
     this.contents.push(fullWord);
+    this.contents.sort();
     wordPosition = convertWordToKeys(fullWord);
   // set value if at last index of word
   } else if (wordPosition === ''){
-    this.spells.push(fullWord);
+    if (this.spells.indexOf(fullWord) === -1)
+      this.spells.push(fullWord);
     return fullWord
   }
-  console.log(wordPosition);
   // take first letter
   var first = wordPosition[0];
   // create new node
@@ -25,7 +28,8 @@ Trie.prototype.add = function(fullWord, wordPosition){
   	this.nodes[first] = new Trie();
   }
   // call .add on that new node with wordPosition.slice(1)
-  return this.nodes[first].add(fullWord, wordPosition.slice(1));
+
+  return this.nodes[first].addWord(fullWord, wordPosition.slice(1));
 }
 
 Trie.prototype.lookup = function(key){
