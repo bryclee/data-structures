@@ -1,4 +1,4 @@
-var Tree = function(value){
+var Tree = function(value) {
   var newTree = {};
   newTree.value = value;
   newTree.children = [];  // fix me
@@ -12,44 +12,44 @@ var Tree = function(value){
 
 var treeMethods = {};
 
-treeMethods.addChild = function(value){
-	var newTree = Tree(value);
+treeMethods.addChild = function(value) {
+  var newTree = Tree(value);
   newTree.parent = this;
-	this.children.push(newTree);
+  this.children.push(newTree);
 };
 
-treeMethods.contains = function(target){
-	// recursively search through each child for the target
-  if (this.value === target){
-  	return true;
-  	// if it has children
-  } else if (this.children.length !== 0){
-    for (var i = 0; i < this.children.length; i++){
-    	// search through all the child branches
-      if (this.children[i].contains(target)){
-      	return true;
+treeMethods.contains = function(target) {
+  // recursively search through each child for the target
+  if (this.value === target) {
+    return true;
+    // if it has children
+  } else if (this.children.length !== 0) {
+    for (var i = 0; i < this.children.length; i++) {
+      // search through all the child branches
+      if (this.children[i].contains(target)) {
+        return true;
       }
     }
   } //target is not value, none of children returned true for target
   return false;
 };
 
-treeMethods.removeFromParent = function(){
+treeMethods.removeFromParent = function() {
   if (!this.parent) return;
 
   var parent = this.parent;
   this.parent = null;
-  for (var i = 0; i < parent.children.length; i++){
-    if (parent.children[i] == this){
+  for (var i = 0; i < parent.children.length; i++) {
+    if (parent.children[i] == this) {
       parent.children.splice(i);
       return;
     }
   }
 };
 
-treeMethods.traverse = function(cb){
+treeMethods.traverse = function(cb) {
   cb(this.value);
-  for (var i = 0; i < this.children.length; i++){
+  for (var i = 0; i < this.children.length; i++) {
     this.children[i].traverse(cb);
   }
 };

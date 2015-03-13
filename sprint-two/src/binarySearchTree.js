@@ -1,4 +1,4 @@
-var BinarySearchTree = function(value, autobal){
+var BinarySearchTree = function(value, autobal) {
   var tree = Object.create(BinarySearchTree.prototype);
 
   tree.value = value;
@@ -12,36 +12,36 @@ var BinarySearchTree = function(value, autobal){
   return tree;
 };
 
-BinarySearchTree.prototype.insert = function(val){
-	// check lower or greater than value
+BinarySearchTree.prototype.insert = function(val) {
+  // check lower or greater than value
   var res;
 
-  if (val < this.value){
-  	// check if branch does not exist and add or
+  if (val < this.value) {
+    // check if branch does not exist and add or
     this.leftWeight++;
     // call insert of that branch
     // set parent property of new branch
     // increase width of this by 1
     // start depth counter at 1
-    if (this.left === null){
+    if (this.left === null) {
       res = new BinarySearchTree(val, this.autobal);
       this.left = res;
       this.left.parent = this;
     } else {
-    	res = this.left.insert(val);
+      res = this.left.insert(val);
     }
-  } else if (val > this.value){
+  } else if (val > this.value) {
     this.rightWeight++;
-    if (this.right === null){
+    if (this.right === null) {
       res = new BinarySearchTree(val, this.autobal);
       this.right = res; 
       this.right.parent = this;
-  	} else {
+    } else {
       res = this.right.insert(val);
     }
   }
   // check if node is unbalanced goes here
-  if (this.autobal !== undefined){
+  if (this.autobal !== undefined) {
     if (Math.abs(this.rightWeight - this.leftWeight) > 1)
       this.rebalance(this.rightWeight - this.leftWeight);
   }
@@ -49,24 +49,24 @@ BinarySearchTree.prototype.insert = function(val){
 };
 
 
-BinarySearchTree.prototype.contains = function(val){
+BinarySearchTree.prototype.contains = function(val) {
   if (this.getBranch(val) !== null)
     return true;
   else
     return false;
 };
 
-BinarySearchTree.prototype.getBranch = function(val){
-  if (this.value == val){
+BinarySearchTree.prototype.getBranch = function(val) {
+  if (this.value == val) {
     return this;
-  } else if (val < this.value){
-    if (this.left === null){
+  } else if (val < this.value) {
+    if (this.left === null) {
       return null;
     } else {
       return this.left.getBranch(val);
     }
-  } else if (val > this.value){
-    if (this.right === null){
+  } else if (val > this.value) {
+    if (this.right === null) {
       return null;
     } else {
       return this.right.getBranch(val);
@@ -74,39 +74,39 @@ BinarySearchTree.prototype.getBranch = function(val){
   }
 }
 
-BinarySearchTree.prototype.getTopParent = function(){
+BinarySearchTree.prototype.getTopParent = function() {
   if (this.parent === null)
     return this;
   else return this.parent.getTopParent();
 }
 
-BinarySearchTree.prototype.depthFirstLog = function(cb){
+BinarySearchTree.prototype.depthFirstLog = function(cb) {
   cb(this.value);
   this.left && this.left.depthFirstLog(cb);
   this.right && this.right.depthFirstLog(cb);
 };
 
-BinarySearchTree.prototype.breadthFirstLog = function(cb){
+BinarySearchTree.prototype.breadthFirstLog = function(cb) {
   var queue = [];
   var nextQueue = [];
   queue.push(this);
 
   // process all in queue first (this level) before starting nextQueue
-  while (queue.length > 0 || nextQueue.length > 0){
-    while (queue.length > 0){
+  while (queue.length > 0 || nextQueue.length > 0) {
+    while (queue.length > 0) {
       var testing = queue.shift();
       cb(testing.value);
       (testing.left !== null) && (nextQueue.push(testing.left));
       (testing.right !== null) && (nextQueue.push(testing.right));
     }
-    if (nextQueue.length > 0){
+    if (nextQueue.length > 0) {
       queue = nextQueue;
       nextQueue = [];
     }
   }
 }
 
-BinarySearchTree.prototype.rebalance = function(dir){
+BinarySearchTree.prototype.rebalance = function(dir) {
   // rebalance in direction, negative is left, pos is right
   var parent;
   var child;
@@ -115,7 +115,7 @@ BinarySearchTree.prototype.rebalance = function(dir){
   // and this child to childClosest
 
   // rebalance left, this.left branch takes this place
-  if (dir < 0){
+  if (dir < 0) {
     parent = this.parent;
     child = this.left;
     if (!child)
@@ -134,7 +134,7 @@ BinarySearchTree.prototype.rebalance = function(dir){
     this.parent = child;
     
     // reshuffle the weights
-    if (childClosest){
+    if (childClosest) {
       this.leftWeight = childClosest.leftWeight + childClosest.rightWeight + 1;
     } else {
       this.leftWeight = 0;
@@ -159,7 +159,7 @@ BinarySearchTree.prototype.rebalance = function(dir){
     (child !== null) && (child.left = this);
     this.parent = child;
 
-    if (childClosest){
+    if (childClosest) {
       this.rightWeight = childClosest.leftWeight + childClosest.rightWeight + 1;
     } else
       this.rightWeight = 0;
@@ -168,7 +168,7 @@ BinarySearchTree.prototype.rebalance = function(dir){
   this.printTree();
 }
 
-BinarySearchTree.prototype.printTree = function(){
+BinarySearchTree.prototype.printTree = function() {
   var testing;
   var results;
   var depth = 0;
@@ -181,14 +181,14 @@ BinarySearchTree.prototype.printTree = function(){
 
   // process all in queue first (this level) before starting nextQueue
   // logging each node of the tree in levels
-  while (totalElements > 0){
+  while (totalElements > 0) {
     console.log(totalElements);
     results = [];
     // process level
-    while (queue.length > 0){
+    while (queue.length > 0) {
       testing = queue.shift();
       // set depth if testing is not null
-      if (testing){
+      if (testing) {
         totalElements--;
         results.push(testing.value);
         nextQueue.push(testing.left);
@@ -199,7 +199,7 @@ BinarySearchTree.prototype.printTree = function(){
       }
     }
     // output level
-    if (nextQueue.length > 0){
+    if (nextQueue.length > 0) {
       allResults.push(results);
       depth++;
       queue = nextQueue;
@@ -207,31 +207,16 @@ BinarySearchTree.prototype.printTree = function(){
     }
   }
   // output the elements in the results
-  _.each(allResults, function(line, idx, allResults){
+  _.each(allResults, function(line, idx, allResults) {
     results = [];
     spaces = Array(Math.pow(2,(depth - idx - 1))).join(' ');
-    _.each(line, function(node){
+    _.each(line, function(node) {
       results.push(spaces,node,spaces,' ');
     })
     console.log(results.join(''));
   });
 }
 
-/* examples: == depth: 1, 1 space before
-1-
-- -
-=============== depth: 2, 3 spaces before
-   -
- -   -
-- - - -
-=============== depth: 3, 7 spaces before
-       -
-   -       -
- -   -   -   -
-- - - - - - - -
-
-spaces = 2d * 1
-*/
 /*
  * Complexity: What is the time complexity of the above functions?
  */

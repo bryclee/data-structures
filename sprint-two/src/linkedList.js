@@ -1,10 +1,10 @@
-var LinkedList = function(){
+var LinkedList = function() {
   // create a linked list, using the functional method
   var list = {};
   list.head = null;
   list.tail = null;
 
-  list.addToTail = function(value){
+  list.addToTail = function(value) {
     // create a new Node, set tail ref, set list head and tail refs
     var newNode = Node(value);
 
@@ -13,7 +13,7 @@ var LinkedList = function(){
     list.tail = newNode;
   };
 
-  list.removeHead = function(){
+  list.removeHead = function() {
     // set the head.next node to list.head
     // delete the head.next node
     // return the old head value
@@ -23,7 +23,7 @@ var LinkedList = function(){
     return result;
   };
 
-  list.contains = function(target){
+  list.contains = function(target) {
     // starting from head, look through all nodes for target value
     var idx = list.head;
     while (idx) {
@@ -37,14 +37,14 @@ var LinkedList = function(){
   return list;
 };
 
-var DoubleLinkedList = function(){
+var DoubleLinkedList = function() {
   var list = LinkedList();
 
-  list.addToTail = function(value){
+  list.addToTail = function(value) {
     var newNode = DoubleNode(value);
 
     // set previous value to new node
-    if (list.tail){
+    if (list.tail) {
       list.tail.next = newNode;
       newNode.previous = list.tail;
     }
@@ -52,10 +52,10 @@ var DoubleLinkedList = function(){
     list.tail = newNode;
   };
 
-  list.addToHead = function(value){
+  list.addToHead = function(value) {
     var newNode = DoubleNode(value);
 
-    if (list.head){
+    if (list.head) {
       list.head.previous = newNode;
       newNode.next = list.head;
     }
@@ -65,7 +65,7 @@ var DoubleLinkedList = function(){
   return list;
 }
 
-var Node = function(value){
+var Node = function(value) {
   // create node object
   var node = {};
 
@@ -75,7 +75,7 @@ var Node = function(value){
   return node;
 };
 
-var DoubleNode = function(value){
+var DoubleNode = function(value) {
   var node = Node(value);
 
   node.previous = null;

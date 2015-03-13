@@ -6,21 +6,21 @@ var Queue = function() {
   this.storage = {};
 };
 
-Queue.prototype.enqueue = function(value){
+Queue.prototype.enqueue = function(value) {
   this.storage[this.last] = value;
   this.last++;
 };
 
-Queue.prototype.dequeue = function(){
-  if (this.size()){
-  	var result = this.storage[this.first];
-  	delete this.storage[this.first];
-  	this.first++;
+Queue.prototype.dequeue = function() {
+  if (this.size()) {
+    var result = this.storage[this.first];
+    delete this.storage[this.first];
+    this.first++;
 
-  	return result;
+    return result;
   }
 };
 
-Queue.prototype.size = function(){
+Queue.prototype.size = function() {
   return this.last - this.first;
 };

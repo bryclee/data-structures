@@ -12,13 +12,13 @@ var Stack = function() {
 
 var stackMethods = {};
 
-stackMethods.push = function(value){
+stackMethods.push = function(value) {
   this.storage[this.items] = value;
   this.items++;
 };
 
-stackMethods.pop = function(){
-  if (this.items){
+stackMethods.pop = function() {
+  if (this.items) {
     this.items--;
     var result = this.storage[this.items];
     delete this.storage[this.items];
@@ -27,6 +27,6 @@ stackMethods.pop = function(){
   }
 };
 
-stackMethods.size = function(){
+stackMethods.size = function() {
   return this.items;
 }

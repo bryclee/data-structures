@@ -1,14 +1,14 @@
-var Trie = function(){
-	this.spells = []; // a list of the words spelled with this combination
+var Trie = function() {
+  this.spells = []; // a list of the words spelled with this combination
   this.nodes = {};
   this.contents = [];
 }
 
-Trie.prototype.addWord = function(fullWord, wordPosition){
-	// .add() will add word to Trie, creating nodes letter by letter until word
-	// is created.
+Trie.prototype.addWord = function(fullWord, wordPosition) {
+  // .add() will add word to Trie, creating nodes letter by letter until word
+  // is created.
   // initialize if word not input
-  if (wordPosition === undefined){
+  if (wordPosition === undefined) {
     fullWord = fullWord.toLowerCase();
     if (this.contents.indexOf(fullWord) !== -1)
       return 0;
@@ -16,7 +16,7 @@ Trie.prototype.addWord = function(fullWord, wordPosition){
     this.contents.sort();
     wordPosition = convertWordToKeys(fullWord);
   // set value if at last index of word
-  } else if (wordPosition === ''){
+  } else if (wordPosition === '') {
     if (this.spells.indexOf(fullWord) === -1)
       this.spells.push(fullWord);
     return fullWord
@@ -24,20 +24,20 @@ Trie.prototype.addWord = function(fullWord, wordPosition){
   // take first letter
   var first = wordPosition[0];
   // create new node
-  if (!this.nodes[first]){
-  	this.nodes[first] = new Trie();
+  if (!this.nodes[first]) {
+    this.nodes[first] = new Trie();
   }
   // call .add on that new node with wordPosition.slice(1)
 
   return this.nodes[first].addWord(fullWord, wordPosition.slice(1));
 }
 
-Trie.prototype.lookup = function(key){
+Trie.prototype.lookup = function(key) {
   // if no more key and this word spells something
   // return what it spells
   if (typeof key === 'number')
     key = key.toString();
-  if (!key && this.spells.length !== 0){
+  if (!key && this.spells.length !== 0) {
     return this.spells;
   }
   
@@ -49,15 +49,15 @@ Trie.prototype.lookup = function(key){
     return this.nodes[first].lookup(key.slice(1));
 }
 
-var convertWordToKeys = function(word){
+var convertWordToKeys = function(word) {
   // convert a word to the numbers it creates
   var result = [];
   var letters = word.toLowerCase().match(/[a-z]/g);
   var let;
-  for (var i = 0; i < letters.length; i++){
+  for (var i = 0; i < letters.length; i++) {
     let = letters[i];
     if (let.search(/[abc]/) >= 0)
-    	result.push('2');
+      result.push('2');
     else if (let.search(/[def]/) >= 0)
       result.push('3');
     else if (let.search(/[ghi]/) >= 0)

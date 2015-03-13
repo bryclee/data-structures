@@ -12,22 +12,22 @@ var Stack = function() {
 
 var stackMethods = {};
 
-stackMethods.push = function(value){
-	// add value to stack
-	this.storage[this.items] = value;
-	this.items++;
+stackMethods.push = function(value) {
+  // add value to stack
+  this.storage[this.items] = value;
+  this.items++;
 }
 
-stackMethods.size = function(){
-	return this.items;
+stackMethods.size = function() {
+  return this.items;
 }
 
-stackMethods.pop = function(){
-	// return top value
-	if (this.items) {
-			this.items--;
-		var result = this.storage[this.items];
-		delete this.storage[this.items];
-		return result;
-	}
+stackMethods.pop = function() {
+  // return top value
+  if (this.items) {
+      this.items--;
+    var result = this.storage[this.items];
+    delete this.storage[this.items];
+    return result;
+  }
 }
