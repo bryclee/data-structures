@@ -23,6 +23,10 @@ HashTable.prototype.insert = function(k, v) {
   }
   // did not find key
   bucket.push([k, v]);
+  this._items++;
+  if (this._items > 0.75 * this._limit) {
+    this._resize(this._limit * 2);
+  }
 };
 
 HashTable.prototype.retrieve = function(k) {
@@ -31,12 +35,13 @@ HashTable.prototype.retrieve = function(k) {
   var bucket = this._storage.get(i);
   
   // loop through the bucket contents looking for key
-  for (var i = 0; i < bucket.length; i++) {
-    if (bucket[i][0] === k) {
-      return bucket[i][1];
+  if (bucket) {
+    for (var i = 0; i < bucket.length; i++) {
+      if (bucket[i][0] === k) {
+        return bucket[i][1];
+      }
     }
   }
-  
   return null;
 };
 
@@ -49,13 +54,30 @@ HashTable.prototype.remove = function(k) {
   for (var i = 0; i < bucket.length; i++) {
     if (bucket[i][0] === k) {
       bucket.splice(i);
+      this._items--;
+      if (this._items < 0.25 * this._limit) {
+        this._resize(this._limit * 0.5);
+      }
       return;
     }
   }
-  
 };
 
-
+HashTable.prototype._resize = function(newLimit) {
+  var oldHash = this._storage;
+  var self = this;
+  this._storage = new LimitedArray(newLimit);
+  this._items = 0;
+  this._limit = newLimit;
+  // for each of oldHash, re-add to new Hash
+  oldHash.each(function(bucket) {
+    if (bucket) {
+      for (var i = 0; i < bucket.length; i++) {
+        self.insert(bucket[i][0], bucket[i][1]);
+      }
+    }
+  });
+}
 
 /*
  * Complexity: What is the time complexity of the above functions?
